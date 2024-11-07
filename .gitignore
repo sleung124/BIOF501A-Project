@@ -1,0 +1,10 @@
+# will remove later, but keeping tutorial.nf as sanity check
+tutorial.nf
+
+# Ignore files produced by nexflow
+*.nextflow.log*
+*html
+*trace*txt
+*.nextflow/
+work/
+
