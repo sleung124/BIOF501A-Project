@@ -4,6 +4,7 @@
         - figure out what params are needed
 */
 
+// import processes from specific modules
 include { PREPROCESS_DATA }     from "./modules/preprocess"
 include { CELL_DECONVOLUTION }  from "./modules/cell_deconvolution"
 include { FIND_DEGS }           from "./modules/differential_expression"
