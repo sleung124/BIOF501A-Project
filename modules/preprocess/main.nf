@@ -6,5 +6,16 @@ process PREPROCESS_DATA {
           mitochondrial content above threshold
     */
 
-    
+    publishDir params.outputDir, mode: 'copy'
+
+    input:
+        path(script) 
+
+    output:
+        ...
+
+    script:
+        """
+        Rscript $script ...
+        """
 }
