@@ -15,6 +15,10 @@ clean:
 	@rm -rf results/
 	@echo "done!"
 
+build:
+	@echo "Building docker image..."
+	docker build -t sleung124/spatial-pipeline .
+
 run_Rstudio:
 	@echo "Running Rstudio..."
 	docker run --rm -it -p 8787:8787 -e PASSWORD=123 -v "`pwd =W`:/home/rstudio/temp" sleung124/visium_repo:latest
