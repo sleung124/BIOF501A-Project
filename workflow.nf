@@ -13,9 +13,12 @@ include { FIND_PATHWAYS }       from "./modules/pathway_analysis"
 workflow {
     // don't know what params I want yet so not gonna put it down
     
+    // path to scripts
+    preprocess_script_ch = file("$projectDir/bin/preprocess.R")
+    
     // very rough outline of steps
-    data = PREPROCESS_DATA(...)
-    data_cv = CELL_DECONVOLUTION(data)
-    degs = FIND_DEGS(data_cv)
+    data = PREPROCESS_DATA(preprocess_script_ch)
+    data_cd = CELL_DECONVOLUTION(data)
+    degs = FIND_DEGS(data_cd)
     paths = FIND_PATHWAYS(degs)
 }

@@ -1,4 +1,5 @@
 #!/usr/bin/env Rscript
 
-library(spacexr)
+# look into using STdeconvolve
+# https://github.com/JEFworks-Lab/STdeconvolve
 
