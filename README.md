@@ -16,3 +16,6 @@ Repository for BIOF501 Project
      - Should be performed for top `n` enriched cells
      - find DEGs off of unsupervised clusters if no reference provided
   4) Gene Ontology with Enrichr
+
+### Dummy Data
+- Currently from [10x genomics](https://www.10xgenomics.com/datasets/mouse-brain-serial-section-2-sagittal-anterior-1-standard)
