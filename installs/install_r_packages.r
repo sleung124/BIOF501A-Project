@@ -24,8 +24,8 @@ remotes::install_github('mojaveazure/seurat-disk')
 devtools::install_github('satijalab/seurat-data')
 
 options(timeout = 600000000)
-# install spaceXR package
-devtools::install_github("dmcable/spacexr", build_vignettes = FALSE)
+# install STdeconvolve package
+remotes::install_github('JEFworks-Lab/STdeconvolve')
 # install enrichR package
 devtools::install_github("wjawaid/enrichR")
 

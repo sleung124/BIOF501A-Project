@@ -4,13 +4,13 @@ library(Seurat)
 library(tidyverse)
 library(here)
 
-MITO_THRESH <- 5
+MITO_THRESH <- 20
 
 # load in data, just from local directory for now
 data <- readRDS(file = here("data", "temp_sample.rds"))
 
 # filter capture spots with high mitochondrial contamination
-data <- PercentageFeatureSet(data, "^MT-", col.name="percent.mito")
+data <- PercentageFeatureSet(data, "^(MT|mt)-", col.name="percent.mito")
 print(paste0("Found ", sum(data@meta.data$percent.mito > MITO_THRESH), " mitochondria-contaminated cells"))
 data <- subset(data, subset = percent.mito <= MITO_THRESH)
 
