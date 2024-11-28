@@ -20,8 +20,10 @@ counts <- cleanCounts(cd, min.lib.size=100, min.reads=10)
 # feature select for genes
 corpus <- restrictCorpus(counts, removeAbove=1.0, removeBelow=0.05)
 ## choose optimal number of cell-types
+
 # this takes a really really long time
 ldas <- fitLDA(t(as.matrix(corpus)), Ks = seq(2, 5, by = 1))
+
 ## get best model results
 optLDA <- optimalModel(models = ldas, opt = "min")
 ## extract deconvolved cell-type proportions (theta) and transcriptional profiles (beta)
