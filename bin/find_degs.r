@@ -42,6 +42,12 @@ to_compare.cell_types <- cell_types_present[order(colSums(table(cell_type.df)), 
 
 #'*step 3: find DEGs*
 #'[IMPORTANT: positive values mean enrichment in GROUP1]
-degs <- FindMarkers(seurat_obj, ident.1 = to_compare.cell_types[1],ident.2 = to_compare.cell_types[2], group.by = "cell_type", slot = "counts")
-print(head(degs))
+seurat_obj <- NormalizeData(seurat_obj)
+degs <- FindMarkers(seurat_obj, ident.1 = to_compare.cell_types[1], ident.2 = to_compare.cell_types[2], group.by = "cell_type", test="negbinom")
+
+#TODO: volcano plot? 
+
+#'*step 4: save results*
+savedir <- here("temp_output", "degs")
+saveRDS(degs, file.path(savedir, "degs.rds"))
 
