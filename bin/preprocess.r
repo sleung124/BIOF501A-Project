@@ -4,15 +4,16 @@ library(Seurat)
 library(tidyverse)
 library(here)
 
-MITO_THRESH <- 20
+params.MITO_THRESH <- 20
+params.path_to_sample <- here("data", "test")
 
 # load in data, just from local directory for now
-data <- readRDS(file = here("data", "temp_sample.rds"))
+data <- Load10X_Spatial(params.path_to_sample)
 
 # filter capture spots with high mitochondrial contamination
 data <- PercentageFeatureSet(data, "^(MT|mt)-", col.name="percent.mito")
-print(paste0("Found ", sum(data@meta.data$percent.mito > MITO_THRESH), " mitochondria-contaminated cells"))
-data <- subset(data, subset = percent.mito <= MITO_THRESH)
+print(paste0("Found ", sum(data@meta.data$percent.mito > params.MITO_THRESH), " mitochondria-contaminated cells"))
+data <- subset(data, subset = percent.mito <= params.MITO_THRESH)
 
 # plot mitochondrial count distribution
 mitoplot <- SpatialFeaturePlot(data, features="percent.mito",

@@ -8,22 +8,27 @@
 library(STdeconvolve)
 library(here)
 
+# Parameters
+# max_LDA_k default is 2
+max_LDA_k <- 2
+params.r <- 2
+
 data <- readRDS(here("temp_output", "preprocess", "filtered_data.rds"))
+# data <- readRDS(file = here("data", "temp_sample.rds"))
 
 # copying the steps from STdeconvolve docs
-cd <- GetAssayData(data, assay="Spatial", layer="counts")
+cd <- GetAssayData(data, assay="Spatial", layer="counts") 
 pos <- GetTissueCoordinates(data)
-colnames(pos) <- c("x", "y")
+colnames(pos) <- c("y", "x")
+pos$y <- -1*pos$y
 
 # remove pixels with low amount of genes
 counts <- cleanCounts(cd, min.lib.size=100, min.reads=10)
 # feature select for genes
 corpus <- restrictCorpus(counts, removeAbove=1.0, removeBelow=0.05)
 ## choose optimal number of cell-types
-
-# this takes a really really long time
-ldas <- fitLDA(t(as.matrix(corpus)), Ks = seq(2, 5, by = 1))
-
+# this takes a really really long time; default use just 2
+ldas <- fitLDA(t(as.matrix(corpus)), Ks = seq(2, max_LDA_k, by = 1))
 ## get best model results
 optLDA <- optimalModel(models = ldas, opt = "min")
 ## extract deconvolved cell-type proportions (theta) and transcriptional profiles (beta)
@@ -33,7 +38,7 @@ deconGexp <- results$beta
 ## visualize deconvolved cell-type proportions
 plt <- vizAllTopics(theta = deconProp,
                     pos = pos,
-                    r = 45,
+                    r = params.r,
                     lwd = 0,
                     showLegend = TRUE,
                     plotTitle = NA) +
@@ -51,4 +56,8 @@ plt <- vizAllTopics(theta = deconProp,
   
   ## remove the pixel "groups", which is the color aesthetic for the pixel borders
   ggplot2::guides(colour = "none")
-plt
+
+# save generated plot and deconvolution results
+deconv_path = here("temp_output", "cell_deconvolution")
+saveRDS(results, file = file.path(deconv_path, "deconv_results.rds"))
+ggsave(file.path(deconv_path, "deconvolution.jpg"), plt, height = 8, width = 10)
