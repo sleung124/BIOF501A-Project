@@ -9,9 +9,9 @@ library(STdeconvolve)
 library(here)
 
 # Parameters
-# max_LDA_k default is 2
-max_LDA_k <- 2
-params.r <- 2
+# MAX_LDA_K default is 2
+MAX_LDA_K <- 2
+RADIUS <- 2
 
 data <- readRDS(here("temp_output", "preprocess", "filtered_data.rds"))
 # data <- readRDS(file = here("data", "temp_sample.rds"))
@@ -28,7 +28,7 @@ counts <- cleanCounts(cd, min.lib.size=100, min.reads=10)
 corpus <- restrictCorpus(counts, removeAbove=1.0, removeBelow=0.05)
 ## choose optimal number of cell-types
 # this takes a really really long time; default use just 2
-ldas <- fitLDA(t(as.matrix(corpus)), Ks = seq(2, max_LDA_k, by = 1))
+ldas <- fitLDA(t(as.matrix(corpus)), Ks = seq(2, MAX_LDA_K, by = 1))
 ## get best model results
 optLDA <- optimalModel(models = ldas, opt = "min")
 ## extract deconvolved cell-type proportions (theta) and transcriptional profiles (beta)
@@ -38,7 +38,7 @@ deconGexp <- results$beta
 ## visualize deconvolved cell-type proportions
 plt <- vizAllTopics(theta = deconProp,
                     pos = pos,
-                    r = params.r,
+                    r = RADIUS,
                     lwd = 0,
                     showLegend = TRUE,
                     plotTitle = NA) +

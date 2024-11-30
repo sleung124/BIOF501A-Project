@@ -17,7 +17,8 @@ workflow {
     // preprocess_script_ch = file("$projectDir/bin/preprocess.R")
     
     // very rough outline of steps
-    data = PREPROCESS_DATA(params.preprocess.MITO_THRESHOLD)
+    data = PREPROCESS_DATA(params.preprocess.MITO_THRESHOLD, 
+    file(params.preprocess.PATH_TO_SAMPLE))
     // data_cd = CELL_DECONVOLUTION(data)
     // degs = FIND_DEGS(data_cd)
     // paths = FIND_PATHWAYS(degs)

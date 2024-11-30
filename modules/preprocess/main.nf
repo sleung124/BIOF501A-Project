@@ -13,9 +13,10 @@ process PREPROCESS_DATA {
     input:
         // path(script)
         val(mito_threshold) 
+        path(path_to_sample)
 
     output:
-        val("hello")
+        stdout
         // should output the following:
         // - intermediate object for cell deconvolution (rds file)
         // - mitoplot
@@ -26,6 +27,6 @@ process PREPROCESS_DATA {
     // Rscript ${path} ${params.preprocess.MITO_THRESHOLD} ${params.preprocess.PATH_TO_SAMPLE}
         """
         echo this is mito threshold: "${mito_threshold}"
-        temp.r
+        preprocess.r ${mito_threshold} ${path_to_sample}
         """
 }
