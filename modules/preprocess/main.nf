@@ -5,6 +5,11 @@ process PREPROCESS_DATA {
         - from visium sample, filter out all capture spots with 
           mitochondrial content above threshold
     */
+publishDir (
+		path: "results/preprocess_data",
+		mode: "copy",
+        saveAs: { filename -> filename.equals('not_want.csv') ? null : filename }
+	)
     tag "Removing low Mitochondrial capture spots..."
     container "sleung124/spatial-pipeline:latest"
     // publishDir params.outputDir, mode: 'copy'
@@ -16,6 +21,8 @@ process PREPROCESS_DATA {
         path(path_to_sample)
 
     output:
+        path("dummy.csv")
+        path("not_want.csv")
         stdout
         // should output the following:
         // - intermediate object for cell deconvolution (rds file)

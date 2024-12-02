@@ -1,8 +1,8 @@
 #!/usr/bin/env Rscript
 
-library(Seurat)
-library(tidyverse)
-library(here)
+# library(Seurat)
+# library(tidyverse)
+# library(here)
 
 #'*commented out to test parameter initialization*
 # MITO_THRESHOLD <- 20
@@ -20,6 +20,14 @@ print(args[2])
 
 MITO_THRESHOLD <- args[1]
 PATH_TO_SAMPLE <- args[2]
+
+
+my_df <- data.frame(rep(10, 5), rep(20, 5))
+not_want_df <- my_df[, -1]
+
+write.csv(my_df, "dummy.csv")
+
+write.csv(not_want_df, "not_want.csv")
 
 # load in data, just from local directory for now
 # data <- Load10X_Spatial(PATH_TO_SAMPLE)
