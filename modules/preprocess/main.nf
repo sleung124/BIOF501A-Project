@@ -21,14 +21,14 @@ publishDir (
         path(path_to_sample)
 
     output:
-        path("dummy.csv")
-        path("not_want.csv")
-        stdout
+        // path("dummy.csv")
+        // path("not_want.csv")
+        // stdout
         // should output the following:
         // - intermediate object for cell deconvolution (rds file)
         // - mitoplot
-        // path("*.rds"), emit processed 
-        // path("${publishDir}/preprocess/*.jpg")
+        path("*.rds"), emit processed 
+        path("${publishDir}/preprocess/*.jpg")
 
     script:
     // Rscript ${path} ${params.preprocess.MITO_THRESHOLD} ${params.preprocess.PATH_TO_SAMPLE}
