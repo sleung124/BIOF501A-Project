@@ -1,4 +1,15 @@
 # BIOF501A-Project
+
+## Big Issues to fix:
+- [ ] Output of modules not correct, but we rolling with it
+      - pipeline runs but only if `temp_output` folder with subdirectories exists
+      - ideally, i'm able to store temporary `.rds` files and call them in other modules while saying images to publishDir  
+- [ ] Have to specify `-with-docker sleung124/spatial-pipeline:latest`, or else pipeline runs without docker image for whatever reason
+      - i know it's a parameter i have to modify in `nextflow.config`, but the things i've tried have not worked so far 
+- [ ] Need to see if user-inputted path to a Visium data directory breaks my pipeline or not
+      - don't think it will but who knows
+- [ ] Missing comprehensive comments for code and README
+
 Repository for BIOF501 Project
 - Goal is to take in Spatial Transcriptomic Data, and output enriched pathways by using DEGs from cell-enriched regions
 - Cell-enriched regions could be defined by some threshold, or user-defined
