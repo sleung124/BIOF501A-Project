@@ -1,5 +1,8 @@
 # BIOF501A-Project
 
+## Current way to run pipeline:
+- `nextflow run workflow.nf -profile docker --degs.QUICK_SAMPLE 100`
+
 ## Big Issues to fix:
 - [x] Output of modules not correct, but we rolling with it
       - pipeline runs but only if `temp_output` folder with subdirectories exists
