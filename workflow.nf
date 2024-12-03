@@ -14,8 +14,8 @@ workflow {
     // don't know what params I want yet so not gonna put it down
     input_path_channel = Channel.fromPath(params.preprocess.PATH_TO_SAMPLE)
     // very rough outline of steps
-    PREPROCESS_DATA(params.preprocess.MITO_THRESHOLD, input_path_channel)
-    CELL_DECONVOLUTION()
-    FIND_DEGS()
-    FIND_PATHWAYS()
+    preprocessed = PREPROCESS_DATA(params.preprocess.MITO_THRESHOLD, input_path_channel)
+    cell_deconv = CELL_DECONVOLUTION(params.cell_deconvolution.MAX_LDA_K, params.cell_deconvolution.RADIUS, preprocessed.processed)
+    degs = FIND_DEGS(params.degs.PVAL_THRESH, params.degs.SHOW_TERMS, params.degs.NUMCHAR, params.degs.ORDER_BY)
+    // FIND_PATHWAYS()
 }

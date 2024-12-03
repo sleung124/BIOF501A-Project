@@ -3,7 +3,7 @@ process FIND_DEGS{
     publishDir (
             path: "results/degs",
             mode: "copy",
-            saveAs: { filename -> filename.equals('not_want.csv') ? null : filename }
+            saveAs: { filename -> filename.equals('degs.rds') ? null : filename }
         )
     tag "Performing differential gene analysis..."
     container "sleung124/spatial-pipeline:latest"

@@ -13,6 +13,9 @@ library(tidyverse)
 library(Seurat)
 
 #'*step 1: load in data*
+args = commandArgs(trailingOnly=TRUE)
+
+
 deconv_results <- readRDS(file.path(here("temp_output", "cell_deconvolution", "deconv_results.rds")))
 seurat_obj <- readRDS(here("temp_output", "preprocess", "filtered_data.rds"))
 

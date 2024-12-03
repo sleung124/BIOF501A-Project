@@ -10,12 +10,13 @@ library(Seurat)
 library(tidyverse)
 library(here)
 
-# Parameters
+# Parameters from user or config file
 # MAX_LDA_K default is 2
-MAX_LDA_K <- 2
-RADIUS <- 2
+args = commandArgs(trailingOnly=TRUE)
 
-data <- readRDS(here("temp_output", "preprocess", "filtered_data.rds"))
+MAX_LDA_K <- args[1]
+RADIUS <- args[2]
+data <- readRDS(args[3])
 # data <- readRDS(file = here("data", "temp_sample.rds"))
 
 # copying the steps from STdeconvolve docs
@@ -60,6 +61,6 @@ plt <- vizAllTopics(theta = deconProp,
   ggplot2::guides(colour = "none")
 
 # save generated plot and deconvolution results
-deconv_path = here("temp_output", "cell_deconvolution")
-saveRDS(results, file = file.path(deconv_path, "deconv_results.rds"))
-ggsave(file.path(deconv_path, "deconvolution.jpg"), plt, height = 8, width = 10)
+# deconv_path = here("temp_output", "cell_deconvolution")
+saveRDS(results, file = "deconv_results.rds")
+ggsave("deconvolution.jpg", plt, height = 8, width = 10)
