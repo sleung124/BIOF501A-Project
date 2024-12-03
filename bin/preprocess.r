@@ -1,8 +1,8 @@
 #!/usr/bin/env Rscript
 
-# library(Seurat)
-# library(tidyverse)
-# library(here)
+library(Seurat)
+library(tidyverse)
+library(here)
 
 #'*commented out to test parameter initialization*
 # MITO_THRESHOLD <- 20
@@ -15,12 +15,13 @@ args = commandArgs(trailingOnly=TRUE)
 
 # print(args)
 
-print(args[1])
-print(args[2])
+# print(args[1])
+# print(args[2])
 
 MITO_THRESHOLD <- args[1]
 PATH_TO_SAMPLE <- args[2]
 
+# print(PATH_TO_SAMPLE)
 
 # my_df <- data.frame(rep(10, 5), rep(20, 5))
 # not_want_df <- my_df[, -1]
@@ -30,8 +31,10 @@ PATH_TO_SAMPLE <- args[2]
 # write.csv(not_want_df, "not_want.csv")
 
 # load in data, just from local directory for now
-if (PATH_TO_SAMPLE == "data/temp_sample.rds")
-data <- Load10X_Spatial(PATH_TO_SAMPLE)
+if (grepl("temp_sample.rds", PATH_TO_SAMPLE)) { data <- readRDS(PATH_TO_SAMPLE)
+} else {data <- Load10X_Spatial(PATH_TO_SAMPLE)}
+
+# data <- readRDS(PATH_TO_SAMPLE)
 
 # filter capture spots with high mitochondrial contamination
 data <- PercentageFeatureSet(data, "^(MT|mt)-", col.name="percent.mito")
@@ -61,6 +64,16 @@ mitoplot <- SpatialFeaturePlot(data, features="percent.mito",
     legend.text = element_text(size=14))
 
 # save filtered data and mitoplot
+# Create the folder if it doesn't exist
+folder_path <- here("temp_output")
+if (!dir.exists(folder_path)) {
+    dir.create(folder_path)
+    folders <- c("preprocess", "cell_deconvolution", "pathways", "degs")
+    for (i in 1:length(folders)) {
+        dir.create(here(folder_path, folders[i]))
+    }
+} 
+
 
 mitoplot_path = here("temp_output", "preprocess")
 saveRDS(data, file = file.path(mitoplot_path, "filtered_data.rds"))

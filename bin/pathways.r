@@ -4,6 +4,7 @@
 # load libaries and default params
 library(enrichR)
 library(tidyverse)
+library(here)
 
 #'*Nextflow Params*
 listed_dbs <- listEnrichrDbs()
@@ -21,7 +22,7 @@ degs <- readRDS(here("temp_output", "degs", "degs.rds")) %>%
   select(genes) %>%
   pull()
 
-enriched <- enrichr(degs, params.DBS)
+enriched <- enrichr(degs, DBS)
 
 #'*Save plots of enriched pathways*
 savedir <- here("temp_output", "pathways")

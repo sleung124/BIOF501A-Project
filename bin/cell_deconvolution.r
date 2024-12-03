@@ -6,6 +6,8 @@
 # need to spend some more time debugging this 
 
 library(STdeconvolve)
+library(Seurat)
+library(tidyverse)
 library(here)
 
 # Parameters

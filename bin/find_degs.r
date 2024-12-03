@@ -43,9 +43,22 @@ to_compare.cell_types <- cell_types_present[order(colSums(table(cell_type.df)), 
 #'*step 3: find DEGs*
 #'[IMPORTANT: positive values mean enrichment in GROUP1]
 seurat_obj <- NormalizeData(seurat_obj)
+
+#'*subset cells to run faster for testing
+# Extract spatial coordinates
+cd <- GetAssayData(seurat_obj, assay="Spatial", layer="counts") 
+pos <- GetTissueCoordinates(seurat_obj)
+
+# Randomly select 10 cells
+random_cells <- sample(rownames(pos), 10)
+
+# Subset Seurat object
+seurat_obj <- subset(seurat_obj, cells = random_cells)
+
 degs <- FindMarkers(seurat_obj, ident.1 = to_compare.cell_types[1], ident.2 = to_compare.cell_types[2], group.by = "cell_type", test="negbinom")
 
 #TODO: volcano plot? 
+# print(degs)
 
 #'*step 4: save results*
 savedir <- here("temp_output", "degs")

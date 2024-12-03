@@ -3,6 +3,7 @@ tutorial.nf
 data/TB_DELETED/
 data/test/
 results/
+temp_output/
 
 # Ignore files produced by nexflow
 *.nextflow.log*
