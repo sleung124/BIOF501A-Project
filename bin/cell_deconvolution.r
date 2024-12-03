@@ -14,12 +14,12 @@ library(here)
 # MAX_LDA_K default is 2
 args = commandArgs(trailingOnly=TRUE)
 
-MAX_LDA_K <- args[1]
-RADIUS <- args[2]
+MAX_LDA_K <- as.integer(args[1])
+RADIUS <- as.double(args[2])
 data <- readRDS(args[3])
 # data <- readRDS(file = here("data", "temp_sample.rds"))
 
-# copying the steps from STdeconvolve docs
+# copying the steps from STdeconvolve docs, link above
 cd <- GetAssayData(data, assay="Spatial", layer="counts") 
 pos <- GetTissueCoordinates(data)
 colnames(pos) <- c("y", "x")
@@ -38,25 +38,24 @@ optLDA <- optimalModel(models = ldas, opt = "min")
 results <- getBetaTheta(optLDA, perc.filt = 0.05, betaScale = 1000)
 deconProp <- results$theta
 deconGexp <- results$beta
+
+# print(deconProp)
 ## visualize deconvolved cell-type proportions
 plt <- vizAllTopics(theta = deconProp,
                     pos = pos,
                     r = RADIUS,
                     lwd = 0,
                     showLegend = TRUE,
-                    plotTitle = NA) +
+                    plotTitle = NA) + 
   ggplot2::guides(fill=ggplot2::guide_legend(ncol=2)) +
-  
   ## outer border
   ggplot2::geom_rect(data = data.frame(pos),
                      ggplot2::aes(xmin = min(x)-90, xmax = max(x)+90,
                                   ymin = min(y)-90, ymax = max(y)+90),
                      fill = NA, color = "black", linetype = "solid", linewidth = 0.5) +
-  
   ggplot2::theme(
     plot.background = ggplot2::element_blank()
   ) +
-  
   ## remove the pixel "groups", which is the color aesthetic for the pixel borders
   ggplot2::guides(colour = "none")
 

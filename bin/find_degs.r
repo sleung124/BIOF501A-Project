@@ -15,9 +15,11 @@ library(Seurat)
 #'*step 1: load in data*
 args = commandArgs(trailingOnly=TRUE)
 
-
-deconv_results <- readRDS(file.path(here("temp_output", "cell_deconvolution", "deconv_results.rds")))
-seurat_obj <- readRDS(here("temp_output", "preprocess", "filtered_data.rds"))
+quick_sample <- as.integer(args[1])
+deconv_results <- readRDS(args[2])
+seurat_obj <- readRDS(args[3])
+# deconv_results <- readRDS(file.path(here("temp_output", "cell_deconvolution", "deconv_results.rds")))
+# seurat_obj <- readRDS(here("temp_output", "preprocess", "filtered_data.rds"))
 
 #'*step 2: categorize capture spots by cells*
 # data$theta is a matrix. Rows are capture spots, columns are cell type. Intersection is cell proportion
@@ -49,14 +51,18 @@ seurat_obj <- NormalizeData(seurat_obj)
 
 #'*subset cells to run faster for testing
 # Extract spatial coordinates
-cd <- GetAssayData(seurat_obj, assay="Spatial", layer="counts") 
-pos <- GetTissueCoordinates(seurat_obj)
+if (quick_sample > 0) {
+  print(paste0("Sampling ", quick_sample, " random capture spots"))
 
-# Randomly select 10 cells
-random_cells <- sample(rownames(pos), 10)
+  cd <- GetAssayData(seurat_obj, assay="Spatial", layer="counts") 
+  pos <- GetTissueCoordinates(seurat_obj)
 
-# Subset Seurat object
-seurat_obj <- subset(seurat_obj, cells = random_cells)
+  # Randomly select 10 cells
+  random_cells <- sample(rownames(pos), quick_sample)
+
+  # Subset Seurat object
+  seurat_obj <- subset(seurat_obj, cells = random_cells)
+}
 
 degs <- FindMarkers(seurat_obj, ident.1 = to_compare.cell_types[1], ident.2 = to_compare.cell_types[2], group.by = "cell_type", test="negbinom")
 
@@ -64,6 +70,7 @@ degs <- FindMarkers(seurat_obj, ident.1 = to_compare.cell_types[1], ident.2 = to
 # print(degs)
 
 #'*step 4: save results*
-savedir <- here("temp_output", "degs")
-saveRDS(degs, file.path(savedir, "degs.rds"))
+# savedir <- here("temp_output", "degs")
+write.csv(degs, "degs.csv")
+saveRDS(degs, "degs.rds")
 

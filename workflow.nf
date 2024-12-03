@@ -16,6 +16,6 @@ workflow {
     // very rough outline of steps
     preprocessed = PREPROCESS_DATA(params.preprocess.MITO_THRESHOLD, input_path_channel)
     cell_deconv = CELL_DECONVOLUTION(params.cell_deconvolution.MAX_LDA_K, params.cell_deconvolution.RADIUS, preprocessed.processed)
-    degs = FIND_DEGS(params.degs.PVAL_THRESH, params.degs.SHOW_TERMS, params.degs.NUMCHAR, params.degs.ORDER_BY)
-    // FIND_PATHWAYS()
+    degs = FIND_DEGS(params.degs.QUICK_SAMPLE, cell_deconv.cell_deconvolved, preprocessed.processed)
+    FIND_PATHWAYS(params.pathways.PVAL_THRESH, params.pathways.SHOW_TERMS, params.pathways.NUMCHAR, params.pathways.ORDER_BY, params.pathways.DBS, degs.degs)
 }

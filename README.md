@@ -1,11 +1,12 @@
 # BIOF501A-Project
 
 ## Big Issues to fix:
-- [ ] Output of modules not correct, but we rolling with it
+- [x] Output of modules not correct, but we rolling with it
       - pipeline runs but only if `temp_output` folder with subdirectories exists
       - ideally, i'm able to store temporary `.rds` files and call them in other modules while saying images to publishDir  
-- [ ] Have to specify `-with-docker sleung124/spatial-pipeline:latest`, or else pipeline runs without docker image for whatever reason
+- [x] Have to specify `-with-docker sleung124/spatial-pipeline:latest`, or else pipeline runs without docker image for whatever reason
       - i know it's a parameter i have to modify in `nextflow.config`, but the things i've tried have not worked so far 
+      - SOLVED: we now just use `-with-profile docker`
 - [ ] Need to see if user-inputted path to a Visium data directory breaks my pipeline or not
       - don't think it will but who knows
 - [ ] Missing comprehensive comments for code and README
