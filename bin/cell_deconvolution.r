@@ -17,7 +17,6 @@ args = commandArgs(trailingOnly=TRUE)
 MAX_LDA_K <- as.integer(args[1])
 RADIUS <- as.double(args[2])
 data <- readRDS(args[3])
-# data <- readRDS(file = here("data", "temp_sample.rds"))
 
 # copying the steps from STdeconvolve docs, link above
 cd <- GetAssayData(data, assay="Spatial", layer="counts") 
@@ -60,6 +59,5 @@ plt <- vizAllTopics(theta = deconProp,
   ggplot2::guides(colour = "none")
 
 # save generated plot and deconvolution results
-# deconv_path = here("temp_output", "cell_deconvolution")
 saveRDS(results, file = "deconv_results.rds")
 ggsave("deconvolution.jpg", plt, height = 8, width = 10)

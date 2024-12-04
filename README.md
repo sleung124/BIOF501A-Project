@@ -1,10 +1,10 @@
 # BIOF501A-Project
 
 ## Current way to run pipeline:
-- `nextflow run workflow.nf -profile docker`
+- `nextflow run main.nf -profile docker`
 
 ### To run Minimum Viable Product (MVP):
-- `nextflow run workflow.nf -profile docker,test`
+- `nextflow run main.nf -profile docker,test`
 
 ### NOTE
 - If you are using your own data, make sure this pipeline is in the root of data folder
@@ -16,7 +16,7 @@
 - [x] Have to specify `-with-docker sleung124/spatial-pipeline:latest`, or else pipeline runs without docker image for whatever reason
       - i know it's a parameter i have to modify in `nextflow.config`, but the things i've tried have not worked so far 
       - SOLVED: we now just use `-with-profile docker`
-- [ ] Need to see if user-inputted path to a Visium data directory breaks my pipeline or not
+- [x] Need to see if user-inputted path to a Visium data directory breaks my pipeline or not
       - don't think it will but who knows
 - [ ] Missing comprehensive comments for code and README
 
