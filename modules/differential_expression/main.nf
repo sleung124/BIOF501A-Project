@@ -11,6 +11,7 @@ process FIND_DEGS{
     input:
         val quick_sample
         val set_seed
+        val p_val_thresh
         path path_to_deconv
         path path_to_preprocessed
     output:
@@ -19,6 +20,6 @@ process FIND_DEGS{
 
     script:
         """
-        find_degs.r ${quick_sample} ${set_seed} ${path_to_deconv} ${path_to_preprocessed}
+        find_degs.r ${quick_sample} ${set_seed} ${p_val_thresh} ${path_to_deconv} ${path_to_preprocessed}
         """
 }

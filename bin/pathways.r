@@ -9,12 +9,12 @@ library(here)
 #'* declare params from config file / user given arguments
 args = commandArgs(trailingOnly=TRUE)
 
-PVAL_THRESH <- as.double(args[1])
-SHOW_TERMS <- as.integer(args[2])
-NUMCHAR <- as.integer(args[3])
-ORDER_BY <- args[4]
-SPECIES <- paste0(toupper(substr(args[5], 1, 1)), substr(args[5], 2, nchar(args[5])))
-LOADED_DEGS <- readRDS(args[6])
+# PVAL_THRESH <- as.double(args[1])
+SHOW_TERMS <- as.integer(args[1])
+NUMCHAR <- as.integer(args[2])
+ORDER_BY <- args[3]
+SPECIES <- paste0(toupper(substr(args[4], 1, 1)), substr(args[4], 2, nchar(args[4])))
+LOADED_DEGS <- readRDS(args[5])
 
 # TODO: print out args to debug; think SPECIES is not parsing properly
 print(paste0("Argument for processed Species: ", SPECIES))
@@ -25,8 +25,7 @@ listed_dbs <- listEnrichrDbs()
 
 DBS <- unique(listed_dbs$libraryName)[grep(SPECIES,unique(listed_dbs$libraryName))]
 
-degs <- LOADED_DEGS %>%
-  filter(p_val_adj < PVAL_THRESH & p_val_adj > 0) %>%
+degs <- LOADED_DEGS  %>%
   rownames_to_column("genes") %>%
   select(genes) %>%
   pull()

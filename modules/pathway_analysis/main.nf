@@ -8,7 +8,6 @@ process FIND_PATHWAYS {
     // container "sleung124/spatial-pipeline:latest"
     debug "true"
     input:
-        val pval_thresh 
         val show_terms 
         val numchar 
         val order_by 
@@ -19,6 +18,6 @@ process FIND_PATHWAYS {
 
     script:
         """
-        pathways.r ${pval_thresh} ${show_terms} ${numchar} ${order_by} ${species} ${path_to_degs}
+        pathways.r  ${show_terms} ${numchar} ${order_by} ${species} ${path_to_degs}
         """
 }
