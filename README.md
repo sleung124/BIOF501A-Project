@@ -1,7 +1,13 @@
 # BIOF501A-Project
 
 ## Current way to run pipeline:
-- `nextflow run workflow.nf -profile docker --degs.QUICK_SAMPLE 100`
+- `nextflow run workflow.nf -profile docker`
+
+### To run Minimum Viable Product (MVP):
+- `nextflow run workflow.nf -profile docker,test`
+
+### NOTE
+- If you are using your own data, make sure this pipeline is in the root of data folder
 
 ## Big Issues to fix:
 - [x] Output of modules not correct, but we rolling with it

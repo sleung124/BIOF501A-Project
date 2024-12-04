@@ -12,13 +12,13 @@ process FIND_PATHWAYS {
         val show_terms 
         val numchar 
         val order_by 
-        val dbs 
+        val species
         path path_to_degs
     output:
         path "*.jpg"
 
     script:
         """
-        pathways.r ${pval_thresh} ${show_terms} ${numchar} ${order_by} ${dbs} ${path_to_degs}
+        pathways.r ${pval_thresh} ${show_terms} ${numchar} ${order_by} ${species} ${path_to_degs}
         """
 }

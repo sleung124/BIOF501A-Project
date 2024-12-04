@@ -16,11 +16,14 @@ library(Seurat)
 args = commandArgs(trailingOnly=TRUE)
 
 quick_sample <- as.integer(args[1])
-deconv_results <- readRDS(args[2])
-seurat_obj <- readRDS(args[3])
+seed <- as.integer(args[2])
+deconv_results <- readRDS(args[3])
+seurat_obj <- readRDS(args[4])
 # deconv_results <- readRDS(file.path(here("temp_output", "cell_deconvolution", "deconv_results.rds")))
 # seurat_obj <- readRDS(here("temp_output", "preprocess", "filtered_data.rds"))
-
+if (seed > 0) {
+  set.seed(seed)
+}
 #'*step 2: categorize capture spots by cells*
 # data$theta is a matrix. Rows are capture spots, columns are cell type. Intersection is cell proportion
 cell.proportions <- deconv_results$theta

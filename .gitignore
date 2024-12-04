@@ -4,6 +4,8 @@ data/TB_DELETED/
 data/test/
 results/
 temp_output/
+visium_data_test/
+visium_data_test_copy/
 
 # Ignore files produced by nexflow
 *.nextflow.log*

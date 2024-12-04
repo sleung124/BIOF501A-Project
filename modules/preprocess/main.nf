@@ -15,6 +15,7 @@ process PREPROCESS_DATA {
     debug "true"
     input:
         val mito_threshold
+        val filtered_feature_h5 
         path path_to_sample 
 
     output:
@@ -28,6 +29,6 @@ process PREPROCESS_DATA {
     // Rscript ${path} ${params.preprocess.MITO_THRESHOLD} ${params.preprocess.PATH_TO_SAMPLE}
         """
         echo this is mito threshold: "${mito_threshold}"
-        preprocess.r ${mito_threshold} ${path_to_sample}
+        preprocess.r ${mito_threshold} ${filtered_feature_h5} ${path_to_sample}
         """
 }

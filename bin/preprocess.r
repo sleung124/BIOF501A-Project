@@ -14,22 +14,10 @@ library(here)
 args = commandArgs(trailingOnly=TRUE)
 
 MITO_THRESHOLD <- args[1]
-PATH_TO_SAMPLE <- args[2]
+FILTERED_FEATURE_H5 <- args[2]
+PATH_TO_SAMPLE <- args[3]
 
-# print(PATH_TO_SAMPLE)
-
-# my_df <- data.frame(rep(10, 5), rep(20, 5))
-# not_want_df <- my_df[, -1]
-
-# write.csv(my_df, "dummy.csv")
-
-# write.csv(not_want_df, "not_want.csv")
-
-# load in data, just from local directory for now
-if (grepl("temp_sample.rds", PATH_TO_SAMPLE)) { data <- readRDS(PATH_TO_SAMPLE)
-} else {data <- Load10X_Spatial(PATH_TO_SAMPLE)}
-
-# data <- readRDS(PATH_TO_SAMPLE)
+data <- Load10X_Spatial(PATH_TO_SAMPLE, file=FILTERED_FEATURE_H5)
 
 # filter capture spots with high mitochondrial contamination
 data <- PercentageFeatureSet(data, "^(MT|mt)-", col.name="percent.mito")
