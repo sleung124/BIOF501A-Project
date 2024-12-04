@@ -31,7 +31,7 @@ a paper. You can look at readthedocs pages of popular bioinformatics tools to ge
 
 ### Workflow Overview
 
-```
+```mermaid
 flowchart TD
     input --> Preprocessing
     Preprocessing --> Cell_Deconvolution
