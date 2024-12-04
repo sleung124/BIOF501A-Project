@@ -6,6 +6,7 @@ results/
 temp_output/
 visium_data_test/
 visium_data_test_copy/
+Tony_Readme.md
 
 # Ignore files produced by nexflow
 *.nextflow.log*

@@ -33,8 +33,6 @@ degs <- LOADED_DEGS %>%
 
 enriched <- enrichr(degs, DBS)
 
-print(length(enriched))
-
 #'*Save plots of enriched pathways*
 for (i in 1:length(enriched)) {
   print(paste0("On output ", i, " out of ", length(enriched)))
