@@ -22,8 +22,13 @@ print(paste0("Argument for processed Species: ", SPECIES))
 #'*Nextflow Params*
 listed_dbs <- listEnrichrDbs()
 # user can provide a list of libraries to look through 
-
-DBS <- unique(listed_dbs$libraryName)[grep(SPECIES,unique(listed_dbs$libraryName))]
+# only works for Mouse and Human samples for now
+if (SPECIES == "Mouse") {
+  cond <- grep(SPECIES,unique(listed_dbs$libraryName))
+} else {
+  cond <- !grep(SPECIES,unique(listed_dbs$libraryName))
+}
+DBS <- unique(listed_dbs$libraryName)[cond]
 
 degs <- LOADED_DEGS  %>%
   rownames_to_column("genes") %>%
