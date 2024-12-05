@@ -65,7 +65,7 @@ A visual of the workflow can be found below:
 
 ### 2.1 Software Package Versions
 
-This pipeline uses a custom docker image, which can be viewed on dockerhub [here](https://hub.docker.com/repository/docker/sleung124/spatial-pipeline/general). The dockerfile is present in this repository, along with the corresponding `install_r_packages.r` file (under the `installs` folder). All steps were run using `R v4.1.0`.
+This pipeline uses a custom docker image, which can be viewed on dockerhub [here](https://hub.docker.com/repository/docker/sleung124/spatial-pipeline/general). This image is automatically retrived and downloaded from dockerhub when running the workflow, assuming the image is not available locally. The dockerfile is present in this repository, along with the corresponding `install_r_packages.r` file (under the `installs` folder). All steps were run using `R v4.1.0`.
 The package versions for core software packages used can be found in the drop-downs below:
 
 <details>
@@ -102,7 +102,8 @@ docker - v27.2.0
 nextflow - v24.04.4
 java - v17.0.10
 ```
-</details>
+</details></br>
+
 
 ## 3) Installation and Usage
 
@@ -117,7 +118,18 @@ git clone https://github.com/sleung124/BIOF501A-Project.git
 cd BIOF501A-Project/
 ```
 
-This pipeline has test data for you to run as an example (test data collected from [10X Genomics](https://www.10xgenomics.com/) and can be found [here](https://www.10xgenomics.com/datasets/mouse-brain-serial-section-2-sagittal-anterior-1-standard))
+This pipeline has test data for you to run as an example (test data collected from [10X Genomics](https://www.10xgenomics.com/)). This dataset contains a sample of fresh frozen mouse brain tissue, with the following metadata:
+
+- **Numer of samples**: One
+- **Sex of sample**: Male
+- **Age of sample**: >8 weeks
+- **Strain of Species**: C57BL/6 Mice
+- **Disease State**: Healthy
+- **Collected from**: Sagittal Slice of the Anterior
+
+Additional information regarding this sample and instructions for downloading this data can be found [here](https://www.10xgenomics.com/datasets/mouse-brain-serial-section-2-sagittal-anterior-1-standard).
+
+
 To run this pipeline with test data (found in `visium_data` folder), run the following:
 ```Bash
 nextflow run main.nf -profile docker,test
