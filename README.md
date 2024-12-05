@@ -1,4 +1,4 @@
-# SOP Template (replace with name of pipeline here)
+# Spatial Transcriptomics Pipeline for Exploratory Data Analysis - BIOF501-A Group project
 
 Author: Samuel Leung
 
@@ -18,7 +18,7 @@ Author: Samuel Leung
 
 ## 1 Background
 
-RNA sequencing (RNA-seq) is a powerful tool that characterizes gene expression by quantifying transcripts within a given sample [[1](#4-references)]. One of the first methods of performing RNA-seq is with bulk sequencing, where gene expression levels across all genes in a given sample are averaged, but cellular context for these genes are lost. In recent years, developments in RNA-seq technology has allowed for increased resolution of gene expression measurements at the single cell level [[2](#4-references)], overcoming limitations presented from bulk-sequncing. Single-cell RNA-seq provides an abundance of information regarding the composition of cell types and functions within complex tissue, but is lacking in terms of retaining the spatial context of identified cells. The location of a cell could provide crucial information in determining phenotype, cell state, and function. Spatial transcriptomics [[3](#4-references)], a recent development in the RNA-seq field, fills this gap in knowledge by mapping gene expression to specific locations within a tissue sample. When combined with tools like cell devonvolution [[4](#4-references)] and pathway enrichment analysis [[5](#4-references)], 
+RNA sequencing (RNA-seq) is a powerful tool that characterizes gene expression by quantifying transcripts within a given sample [[1](#4-references)]. One of the first methods of performing RNA-seq is with bulk sequencing, where gene expression levels across all genes in a given sample are averaged, but cellular context for these genes are lost. In recent years, developments in RNA-seq technology has allowed for increased resolution of gene expression measurements at the single cell level [[2](#4-references)], overcoming limitations presented from bulk-sequencing. Single-cell RNA-seq provides an abundance of information regarding the composition of cell types and functions within complex tissue, but is lacking in terms of retaining the spatial context of identified cells. The location of a cell could provide crucial information in determining phenotype, cell state, and function. Spatial transcriptomics [[3](#4-references)], a recent development in the RNA-seq field, fills this gap in knowledge by mapping gene expression to specific locations within a tissue sample. When combined with tools like cell devonvolution [[4](#4-references)] and pathway enrichment analysis [[5](#4-references)], 
 information regarding cell organization and regional transcriptional activity can be inferrered.   
 
 The aim of my pipeline is to provide a user-friendly tool for researchers unfamiliar with computational techniques in bioinformatics to perform exploratory data analysis on spatial transcriptomic data. There are many different computational tools to analyze and explore spatial transcriptomic data, and learning to use these various tools can be daunting.
@@ -291,64 +291,3 @@ The `pathways` folder will contain multiple barplots, each created from a differ
 
 [9] Kuleshov, M. V., Jones, M. R., Rouillard, A. D., Fernandez, N. F., Duan, Q., Wang, Z., Koplev, S., Jenkins, S. L., Jagodnik, K. M., Lachmann, A., McDermott, M. G., Monteiro, C. D., Gundersen, G. W., & Ma'ayan, A. (2016). Enrichr: a comprehensive gene set enrichment analysis web server 2016 update. Nucleic acids research, 44(W1), W90–W97. https://doi.org/10.1093/nar/gkw377
 ___
-
-
-
-// ### (EXTRA) Repository Structure
-
-<details>
-  <summary>Open to see Repository Structure</summary>
-
-```bash
-ROOT/
-├── Dockerfile
-├── Makefile
-├── README.md
-├── bin/
-│   ├── cell_deconvolution.r
-│   ├── find_degs.r
-│   ├── pathways.r
-│   └── preprocess.r
-├── expected_results/
-│   ├── cell_deconvolution/
-│   │   └── deconvolution.jpg
-│   ├── degs/
-│   │   └── degs.csv
-│   ├── pathways/
-│   │   ├── HDSigDB_Mouse_2021_pathways.jpg
-│   │   ├── KEGG_2019_Mouse_pathways.jpg
-│   │   ├── KOMP2_Mouse_Phenotypes_2022_pathways.jpg
-│   │   ├── Mouse_Gene_Atlas_pathways.jpg
-│   │   ├──RNAseq_Automatic_GEO_Signatures_Mouse_Down_pathways.jpg
-│   │   ├── RNAseq_Automatic_GEO_Signatures_Mouse_Up_pathways.jpg
-│   │   ├── WikiPathways_2019_Mouse_pathways.jpg
-│   │   └── WikiPathways_2024_Mouse_pathways.jpg
-│   └── preprocess_data/
-│       └── mitoplot.jpg
-├── installs/
-│   └── install_r_packages.r
-├── main.nf/
-├── modules/
-│   ├── cell_deconvolution/
-│   │   └── main.nf
-│   ├── differential_expression/
-│   │   └── main.nf
-│   ├── pathway_analysis/
-│   │   └── main.nf
-│   └── preprocess/
-│       └── main.nf
-├── nextflow.config
-└── visium_data/
-    ├── raw_feature_bc_matrix.h5       
-    ├── filtered_feature_bc_matrix.h5
-    └── spatial/
-        ├── aligned_fiducials.jpg
-        ├── detected_tissue_image.jpg
-        ├── scalefactors_json.json
-        ├── spatial_enrichment.csv
-        ├── tissue_hires_image.png
-        ├── tissue_lowres_image.png
-        └── tissue_positions.csv
-```
-
-</details>
