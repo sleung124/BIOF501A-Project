@@ -3,13 +3,20 @@
 Author: Samuel Leung
 
 ## Table of Contents:
-1. [Background](#1-background)
-1. [Workflow Overview](#2-workflow-overview)
-1. [Installation and Usage](#3-installation-and-usage)
-1. [References](#4-references)
+[1. Background](#1-background)</br></br>
+[2. Workflow Overview](#2-workflow-overview)
+- [2.1 Software Package Versions](#21-software-package-versions)
 
 
-## 1) Background
+[3. Installation and Usage](#3-installation-and-usage)
+- [3.1 Quickstart](#31-quickstart)
+- [3.2 Inputs](#32-input)
+- [3.3 Outputs](#33-output)
+
+[4. References](#4-references)</br>
+
+
+## 1 Background
 
 RNA sequencing (RNA-seq) is a powerful tool that characterizes gene expression by quantifying transcripts within a given sample [[1](#4-references)]. One of the first methods of performing RNA-seq is with bulk sequencing, where gene expression levels across all genes in a given sample are averaged, but cellular context for these genes are lost. In recent years, developments in RNA-seq technology has allowed for increased resolution of gene expression measurements at the single cell level [[2](#4-references)], overcoming limitations presented from bulk-sequncing. Single-cell RNA-seq provides an abundance of information regarding the composition of cell types and functions within complex tissue, but is lacking in terms of retaining the spatial context of identified cells. The location of a cell could provide crucial information in determining phenotype, cell state, and function. Spatial transcriptomics [[3](#4-references)], a recent development in the RNA-seq field, fills this gap in knowledge by mapping gene expression to specific locations within a tissue sample. When combined with tools like cell devonvolution [[4](#4-references)] and pathway enrichment analysis [[5](#4-references)], 
 information regarding cell organization and regional transcriptional activity can be inferrered.   
@@ -58,8 +65,6 @@ A visual of the workflow can be found below:
 
 ### 2.1 Software Package Versions
 
-___
-
 This pipeline uses a custom docker image, which can be viewed on dockerhub [here](https://hub.docker.com/repository/docker/sleung124/spatial-pipeline/general). The dockerfile is present in this repository, along with the corresponding `install_r_packages.r` file (under the `installs` folder).
 The package versions for core software packages used can be found in the drop-downs below:
 
@@ -99,9 +104,9 @@ java - v17.0.10
 ```
 </details>
 
-## 3) Installation and Usage
+## 3 Installation and Usage
 
-### 3.1) Quickstart
+### 3.1 Quickstart
 This pipeline requires [git](https://git-scm.com/downloads), [docker](https://docs.docker.com/engine/install/), and [nextflow](https://www.nextflow.io/docs/latest/install.html). Specific versions of these packages used to compile this project can be found in the [package versions](#21-software-package-versions) section.
 
 - <span style="color:red">NOTE:</span> Also make sure you have an internet connection so that the pipeline can access the necessary databases for gene enrichment analysis. 
@@ -118,7 +123,7 @@ To run this pipeline with test data (found in `visium_data` folder), run the fol
 nextflow run main.nf -profile docker,test
 ```
 
-### 3.2) Input
+### 3.2 Input
 
 This pipeline runs specifically for [V1 Visium](https://www.10xgenomics.com/support/software/space-ranger/latest/getting-started/space-ranger-glossary) data, and only for **human** and **mouse** samples. If you want to use your own data, ensure that the data is in a subdirectory of wherever this pipeline is cloned to. 
 
@@ -183,7 +188,7 @@ Possible parameters for the user to define are as follows:
 - `--pathways.SPECIES`: Species of sample. For now, pipeline only supports **human** and **mouse** samples. Should be one of `Human` or `Mouse`. Default value is `Mouse`.
 
 
-### 3.3) Output
+### 3.3 Output
 <!-- - Describe the format of the output including files and visualizations. Treat this section like the results of
 a paper. You can look at readthedocs pages of popular bioinformatics tools to get inspired for this. -->
 
@@ -266,7 +271,7 @@ The `pathways` folder will contain multiple barplots, each created from a differ
 </figure>
 
 
-### 4) References
+### 4 References
 
 [1] Haque, A., Engel, J., Teichmann, S.A. et al. A practical guide to single-cell RNA-sequencing for biomedical research and clinical applications. Genome Med 9, 75 (2017). https://doi.org/10.1186/s13073-017-0467-4
 
