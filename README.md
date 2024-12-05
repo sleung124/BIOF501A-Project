@@ -54,55 +54,13 @@ This pipeline takes in Visium transcriptomic data as input. Please refer to the 
 
 A visual of the workflow can be found below:
 
-```mermaid
-flowchart TD
-    input --> Preprocessing
-    Preprocessing --> Cell_Deconvolution
-    Cell_Deconvolution --> DEGs
-    DEGs --> Pathways
+![alt text](image.png)
 
-    subgraph Preprocessing[**Preprocessing**]
-        direction LR
-        mito_filter(Seurat) --> mitoplot
-    end
-
-    subgraph Cell_Deconvolution[**Cell Deconvolution**]
-        direction LR
-        STdeconvolve --> spatial_celltype
-    end
-
-    subgraph DEGs[**Differential Gene Analysis**]
-        direction LR
-        FindMarkers(Seurat) --> degs_csv
-    end
-
-    subgraph Pathways[**Enriched Pathways**]
-        direction LR
-        Enrichr --> enrichr_plot
-    end
-
-    input[**Visium Spatial Transcriptomic Data**]
-    mitoplot[Mitochondrial Spatial Plot]
-    spatial_celltype[Cell Type Enrichment Spatial Plots]
-    degs_csv[CSV of Differentially Expressed Genes]
-    enrichr_plot[Pathway Enrichment Plots]
-
-    classDef inputPath fill:salmon,stroke:#333,stroke-width:2px;
-    class input inputPath;
-
-    classDef output fill:lightgreen,stroke:#333,stroke-width:2px;
-    class mitoplot,spatial_celltype,degs_csv,enrichr_plot output;
-
-    classDef process fill:#ccf,stroke:#333,stroke-width:2px;
-    class mito_filter,STdeconvolve,FindMarkers,Enrichr process;
-
-    classDef blackText color:#000000;
-    class process,output,inputPath blacktext; 
-```
 ### 2.1 Software Package Versions
 
 ___
 
+This pipeline uses a custom docker image, which can be viewed on dockerhub [here](https://hub.docker.com/repository/docker/sleung124/spatial-pipeline/general). The dockerfile is present in this repository, along with the corresponding `install_r_packages.r` file (under the `installs` folder).
 The package versions for core software packages used can be found in the drop-downs below:
 
 <details>
@@ -130,13 +88,14 @@ sp - v2.1-4
 </details>
 
 <details>
-    <summary>Click here to see core package versions for softwares not in R:</summary>
+    <summary>Click here to see version numbers for dependencies need to run this pipeline</summary>
 
 ```bash
-TODO
-git - ...
-docker - ...
-nextflow - ...
+# # Format is [package] - [version]
+git - v2.43.0
+docker - v27.2.0
+nextflow - v24.04.4
+java - v17.0.10
 ```
 </details>
 
