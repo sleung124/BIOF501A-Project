@@ -1,12 +1,10 @@
 #!/usr/bin/env Rscript
 
+# Rscript dedicated to reading in Visium data and filtering high mitochondrial count capture spots
+
 library(Seurat)
 library(tidyverse)
 library(here)
-
-#'*commented out to test parameter initialization*
-# MITO_THRESHOLD <- 20
-# PATH_TO_SAMPLE <- here("data", "test")
 
 # Use command line arguments. If user doesn't specify them, use 
 # default parameters as outlined in nextflow.config
@@ -47,17 +45,5 @@ mitoplot <- SpatialFeaturePlot(data, features="percent.mito",
     legend.text = element_text(size=14))
 
 # save filtered data and mitoplot
-# Create the folder if it doesn't exist
-# folder_path <- here("temp_output")
-# if (!dir.exists(folder_path)) {
-#     dir.create(folder_path)
-#     folders <- c("preprocess", "cell_deconvolution", "pathways", "degs")
-#     for (i in 1:length(folders)) {
-#         dir.create(here(folder_path, folders[i]))
-#     }
-# } 
-
-# mitoplot_path = here("temp_output", "preprocess")
-# saveRDS(data, file = file.path(mitoplot_path, "filtered_data.rds"))
 saveRDS(data, file = "filtered_data.rds")
 ggsave("mitoplot.jpg", mitoplot, height = 8, width = 10)
