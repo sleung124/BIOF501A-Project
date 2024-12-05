@@ -29,27 +29,27 @@ My project allows users to start gathering information from their data without t
 
 This pipeline takes in Visium transcriptomic data as input. Please refer to the [quickstart](#31-quickstart) section to learn about how this data should be formatted.
 
- An overview of the steps of this pipeline are as follows:
+ An overview of the steps of this pipeline are listed below. An example of the output from each step is listed in the [output](#33-output) section of this README.
 
 1. **Data Preprocessing** - Filter out poor RNA-quality regions
 - This step uses the [Seurat](https://github.com/satijalab/seurat) package to load in Visium data [[6](#4-references)]
-- Regions are defined to be of low quality if a large amount of mitochondrial contamination is present. If the capture spot has over 20% of reads mapping to mitochondrial counts, the capture spot is excluded from further downstream analysis. This exclusion threshold can be modified (please see the [input](#32-input) section below).
-- The preprocessing step produces a SpatialPlot displaying the distribution of mitochondrial content across the sample, with low quality capture spots removed
+- Regions are defined to be of low quality if a large amount of mitochondrial contamination is present. If the capture spot has over 20% of reads mapping to mitochondrial genes, the capture spot is excluded from further downstream analysis. This exclusion threshold can be modified (please see the [input](#32-input) section below).
+- The preprocessing step produces a SpatialPlot displaying the distribution of mitochondrial content across the sample, with low quality capture spots removed.
 2. **Cell Deconvolution** - Identify distribution of cell enrichment across sample 
 - This step uses reference-free cell-type deconvolution from the [STdeconvolve](https://github.com/JEFworks-Lab/STdeconvolve) package [[7](#4-references)].
-- Each capture spot within a visium slide is large enough to encapsulate 0-10 cells. By default, this step estimates up to 5 different cell types per spot (and their proportion), but the user can modify this parameter(see [usage](#3-installation-and-usage) section for a more detailed description).   
+- Each capture spot within a visium slide is large enough to encapsulate 0-10 cells. By default, this step estimates up to 5 different cell types per spot (along their proportion within the capture spot), but the user can modify this parameter(see [usage](#3-installation-and-usage) section for a more detailed description).   
 
     - <span style="color:red">NOTE:</span> When running on test data (found in the `visium_data` folder), the maximum number of cell types this step estimates is 2.
 
-- For every integer *K* between 2 and the maximum number of cells types, STdeconvolve will fit an LDA model [[8](#4-references)] that differentiates between *K* different cell types. Each model will be evaluated by a balance **(1)** uncertainty of predictions and **(2)** number of rare cell types detected. More details can be found from the STdeconvolve tutorial found [here](https://github.com/JEFworks-Lab/STdeconvolve/blob/devel/docs/additional_features.md).
+- For every integer *K* between 2 and the maximum number of cells types, STdeconvolve will fit an LDA model [[8](#4-references)] that differentiates between *K* different cell types. Each model will be evaluated by a balance **(1)** uncertainty of predictions and **(2)** number of rare cell types detected. More detailed explanations on exact evaluation of model performance can be found from the STdeconvolve tutorial [here](https://github.com/JEFworks-Lab/STdeconvolve/blob/devel/docs/additional_features.md).
 
-- The deconvolution step produces a SpatialPlot, with each capture spot displayed as a piechart of cell type proportions (see the `expected_results/cell_deconvolution` folder for an example).
+- The deconvolution step produces a SpatialPlot, with each capture spot displayed as a piechart of cell type proportions.
 
-3. **Differential Gene Analysis** - Determine differentially expressed genes (DEGs) from most abundant cells 
-- This step uses the *FindMarkers* function in Seurat [[6](#4-references)] to identify DEGs between the two most abundant cell types present
+3. **Differential Gene Analysis** - Determine differentially expressed genes (DEGs) between abundant cell types
+- This step uses the *FindMarkers* function in Seurat [[6](#4-references)] to identify DEGs between the two most abundant cell types present.
 - From cell deconvolution, each capture spot will have a mix of cell types within it. In this step, capture spots are labeled as being enriched in only one cell type (the most abundant one present in that capture spot). 
-- Across the entire sample, cell types are ranked based on how many capture spots are labelled for a specific cell type enrichment. The two most enriched cell types, and their corresponding capture spots, are used for downstream analysis
-- Between the two groups identified using this approach, statistical significance for differences in counts for each gene present is done with a Negative Binomial test. To account for the multiple testing problem, we take the Bonferroni-corrected adjusted P-values and compare it to our P-value threshold (default value in pipeline is 0.05). Genes that pass this check are flagged as statistically significant, and are passed onto Enrichr in the next step.
+- Across the entire sample, cell types are ranked based on how many capture spots are labelled for a specific cell type enrichment. The two most enriched cell types, and their corresponding capture spots, are used for downstream analysis.
+- Between the two groups identified using this approach, gene-specific statistical testing for differences in counts is done with a Negative Binomial test. To account for the multiple testing problem, we take the Bonferroni-corrected adjusted P-values and compare it to our P-value threshold (default value in pipeline is 0.05). Genes that pass this check are flagged as statistically significant, and are passed onto Enrichr in the next step.
 - This step produces a volcano plot, along with the statistically significant genes identified from this step of the workflow. 
 
 4. **Pathway Analysis** - Find enriched biological pathways 
@@ -65,7 +65,7 @@ A visual of the workflow can be found below:
 
 ### 2.1 Software Package Versions
 
-This pipeline uses a custom docker image, which can be viewed on dockerhub [here](https://hub.docker.com/repository/docker/sleung124/spatial-pipeline/general). The dockerfile is present in this repository, along with the corresponding `install_r_packages.r` file (under the `installs` folder).
+This pipeline uses a custom docker image, which can be viewed on dockerhub [here](https://hub.docker.com/repository/docker/sleung124/spatial-pipeline/general). The dockerfile is present in this repository, along with the corresponding `install_r_packages.r` file (under the `installs` folder). All steps were run using `R v4.1.0`.
 The package versions for core software packages used can be found in the drop-downs below:
 
 <details>
@@ -111,7 +111,7 @@ This pipeline requires [git](https://git-scm.com/downloads), [docker](https://do
 
 - <span style="color:red">NOTE:</span> Also make sure you have an internet connection so that the pipeline can access the necessary databases for gene enrichment analysis. 
 
-Download this project (with HTTPS) for use with the following command:
+Download this project (with HTTPS) and enter the project directory with the following commands:
 ```bash
 git clone https://github.com/sleung124/BIOF501A-Project.git
 cd BIOF501A-Project/
@@ -177,8 +177,8 @@ Possible parameters for the user to define are as follows:
 - `--cell_deconvolution.RADIUS`: Size of piechart for each capture spot. The larger the number the bigger the pie chart. Should input a non-negative number. Default radius is 2.
 
 **Differential Gene Analysis Step**:
-- `--degs.QUICK_SAMPLE`: Samples a subset of capture spots to use to identify differentially expressed genes. Should input a whole number. Default value is 0. Mainly used to speed up run time for test example.
-- `--degs.SET_SEED`: Only relevant for when `--degs.QUICK_SAMPLE` is non-zero. Sets the seed for sampling capture spots, for ensuring reproducibility when running test case. Default value is 0. **This parameter does nothing when set at 0**.  
+- `--degs.QUICK_SAMPLE`: Samples a subset of capture spots to use to identify differentially expressed genes. Should input a whole number. Default value is 0 (ie. no sampling of capture spots is used). **Used only to speed up run time for test example**.
+- `--degs.SET_SEED`: Only relevant for when `--degs.QUICK_SAMPLE` is non-zero. Sets the seed for sampling capture spots, for ensuring reproducibility when running test case. Should input a whole number. Default value is 0. **This parameter does nothing when set at 0**.  
 - `--degs.PVAL_THRESH`: Threshold to determine if a gene is statistically significant. Compared against adjusted p-values after Bonferroni adjustment. Should input a number between 0 and 1. Default is 0.05
 
 **Enriched Pathways Step**:
@@ -199,7 +199,8 @@ results/
 ├── cell_deconvolution/
 │   └── deconvolution.jpg
 ├── degs/
-│   └── degs.csv
+│   ├── degs.csv
+│   └── volcano_plot.jpg
 ├── pathways/
 │   ├── <database_1_pathways>.jpg
 │   ├── <database_2_pathways>.jpg
@@ -218,13 +219,14 @@ expected_results/
 ├── cell_deconvolution/
 │   └── deconvolution.jpg
 ├── degs/
-│   └── degs.csv
+│   ├── degs.csv
+│   └── volcano_plot.jpg
 ├── pathways/
 │   ├── HDSigDB_Mouse_2021_pathways.jpg
 │   ├── KEGG_2019_Mouse_pathways.jpg
 │   ├── KOMP2_Mouse_Phenotypes_2022_pathways.jpg
 │   ├── Mouse_Gene_Atlas_pathways.jpg
-│   ├──RNAseq_Automatic_GEO_Signatures_Mouse_Down_pathways.jpg
+│   ├── RNAseq_Automatic_GEO_Signatures_Mouse_Down_pathways.jpg
 │   ├── RNAseq_Automatic_GEO_Signatures_Mouse_Up_pathways.jpg
 │   ├── WikiPathways_2019_Mouse_pathways.jpg
 │   └── WikiPathways_2024_Mouse_pathways.jpg
@@ -240,7 +242,7 @@ The `preprocess_data` folder should contain the JPEG file `mitoplot.jpg`, which 
     <img src="expected_results/preprocess_data/mitoplot.jpg">
 </figure>
 
-The `cell_deconvolution` folder will contain the JPEG file `deconvolution.jpg`, which displays the distribution of cell types within each capture spot with a pie chart. Below is an example of this plot generated from test data, also found in the `expected_results` directory:
+The `cell_deconvolution` folder will contain the JPEG file `deconvolution.jpg`,  which visualizes the distribution of cell types within each capture spot with a pie chart. Capture spots are organized according to their spatial location. Below is an example of this plot generated from test data, also found in the `expected_results` directory:
 
 <figure>
     <img src="expected_results/cell_deconvolution/deconvolution.jpg">
