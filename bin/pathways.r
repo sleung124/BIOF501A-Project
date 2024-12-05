@@ -7,7 +7,7 @@ library(tidyverse)
 library(here)
 
 #'* declare params from config file / user given arguments
-args = commandArgs(trailingOnly=TRUE)
+args <- commandArgs(trailingOnly=TRUE)
 
 # PVAL_THRESH <- as.double(args[1])
 SHOW_TERMS <- as.integer(args[1])

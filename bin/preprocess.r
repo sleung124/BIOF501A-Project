@@ -9,7 +9,7 @@ library(here)
 # Use command line arguments. If user doesn't specify them, use 
 # default parameters as outlined in nextflow.config
 
-args = commandArgs(trailingOnly=TRUE)
+args <- commandArgs(trailingOnly=TRUE)
 
 MITO_THRESHOLD <- args[1]
 FILTERED_FEATURE_H5 <- args[2]

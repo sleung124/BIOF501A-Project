@@ -13,7 +13,7 @@ library(tidyverse)
 library(Seurat)
 
 #'*step 1: load in data*
-args = commandArgs(trailingOnly=TRUE)
+args <- commandArgs(trailingOnly=TRUE)
 
 quick_sample <- as.integer(args[1])
 seed <- as.integer(args[2])
@@ -64,14 +64,33 @@ if (quick_sample > 0) {
   seurat_obj <- subset(seurat_obj, cells = random_cells)
 }
 
-degs <- FindMarkers(seurat_obj, ident.1 = to_compare.cell_types[1], ident.2 = to_compare.cell_types[2], group.by = "cell_type", test="negbinom") %>%
-          filter(p_val_adj < PVAL_THRESH & p_val_adj > 0)
+# find DEGs
+degs <- FindMarkers(seurat_obj, ident.1 = to_compare.cell_types[1], ident.2 = to_compare.cell_types[2], group.by = "cell_type", test="negbinom") 
 
-#TODO: volcano plot? 
-# print(degs)
+# Generate the volcano plot
+volcano_data <- degs %>%
+  mutate(
+    Groups = ifelse(p_val_adj < PVAL_THRESH & avg_log2FC > 0, "Most Abundant Cell Type",
+                   ifelse(p_val_adj < PVAL_THRESH & avg_log2FC < 0, "2nd Most Abundant Cell Type", 
+                          "Non-Significant"))
+  )
+
+volcano_plot <- volcano_data %>%
+  ggplot(aes(x = avg_log2FC, y = -log10(p_val_adj), color = Groups)) +
+  geom_point(alpha = 0.8) +
+  scale_color_manual(values = c("Most Abundant Cell Type" = "red", 
+                                "2nd Most Abundant Cell Type" = "blue",
+                                "Not Significant" = "grey")) +
+  labs(
+    x = "Log2 Fold Change",
+    y = "-Log10 Adjusted P-Value",
+  ) +
+  theme_minimal() +
+  ggtitle("Volcano Plot - Cell Type Abundance Comparisons")
 
 #'*step 4: save results*
-# savedir <- here("temp_output", "degs")
+sig_degs <- degs %>% filter(p_val_adj < PVAL_THRESH & p_val_adj > 0)
 write.csv(degs, "degs.csv")
+ggsave("volcano_plot.jpg", volcano_plot, height = 8, width = 10)
 saveRDS(degs, "degs.rds")
 

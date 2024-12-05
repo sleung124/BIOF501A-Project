@@ -10,9 +10,7 @@ process PREPROCESS_DATA {
             saveAs: { filename -> filename.equals('filtered_data.rds') ? null : filename }
         )
     tag "Removing low Mitochondrial capture spots..."
-    // container "sleung124/spatial-pipeline:latest"
 
-    debug "true"
     input:
         val mito_threshold
         val filtered_feature_h5 

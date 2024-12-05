@@ -6,8 +6,7 @@ process FIND_DEGS{
             saveAs: { filename -> filename.equals('degs.rds') ? null : filename }
         )
     tag "Performing differential gene analysis..."
-    // container "sleung124/spatial-pipeline:latest"
-    debug "true"
+
     input:
         val quick_sample
         val set_seed
@@ -17,6 +16,7 @@ process FIND_DEGS{
     output:
         path "*.rds", emit: degs
         path "*.csv"
+        path "*.jpg"
 
     script:
         """

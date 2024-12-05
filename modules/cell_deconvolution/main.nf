@@ -6,9 +6,7 @@ process CELL_DECONVOLUTION {
         saveAs: { filename -> filename.equals('deconv_results.rds') ? null : filename }
     )
     tag "Performing cell deconvolution..."
-    // container "sleung124/spatial-pipeline:latest"
     
-    debug "true"
     input:
         val max_lda_k
         val radius

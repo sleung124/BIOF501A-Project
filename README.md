@@ -16,9 +16,9 @@ Author: Samuel Leung
 [4. References](#4-references)</br>
 
 
-## 1 Background
+## 1) Background
 
-RNA sequencing (RNA-seq) is a powerful tool that characterizes gene expression by quantifying transcripts within a given sample [[1](#4-references)]. One of the first methods of performing RNA-seq is with bulk sequencing, where gene expression levels across all genes in a given sample are averaged, but cellular context for these genes are lost. In recent years, developments in RNA-seq technology has allowed for increased resolution of gene expression measurements at the single cell level [[2](#4-references)], overcoming limitations presented from bulk-sequencing. Single-cell RNA-seq provides an abundance of information regarding the composition of cell types and functions within complex tissue, but is lacking in terms of retaining the spatial context of identified cells. The location of a cell could provide crucial information in determining phenotype, cell state, and function. Spatial transcriptomics [[3](#4-references)], a recent development in the RNA-seq field, fills this gap in knowledge by mapping gene expression to specific locations within a tissue sample. When combined with tools like cell devonvolution [[4](#4-references)] and pathway enrichment analysis [[5](#4-references)], 
+RNA sequencing (RNA-seq) is a powerful tool that characterizes gene expression by quantifying transcripts within a given sample [[1](#4-references)]. One of the first methods of performing RNA-seq is with bulk sequencing, where gene expression levels across all genes in a given sample are averaged, but cellular context for these genes are lost. In recent years, developments in RNA-seq technology have allowed for increased resolution of gene expression measurements at the single cell level [[2](#4-references)], overcoming limitations presented from bulk-sequencing. Single-cell RNA-seq provides an abundance of information regarding the composition of cell types and functions within complex tissue, but is lacking in terms of retaining the spatial context of identified cells. The location of a cell could provide crucial information in determining phenotype, cell state, and function. Spatial transcriptomics [[3](#4-references)], a recent development in the RNA-seq field, fills this gap in knowledge by mapping gene expression to specific locations within a tissue sample. When combined with tools like cell devonvolution [[4](#4-references)] and pathway enrichment analysis [[5](#4-references)], 
 information regarding cell organization and regional transcriptional activity can be inferrered.   
 
 The aim of my pipeline is to provide a user-friendly tool for researchers unfamiliar with computational techniques in bioinformatics to perform exploratory data analysis on spatial transcriptomic data. There are many different computational tools to analyze and explore spatial transcriptomic data, and learning to use these various tools can be daunting.
@@ -49,8 +49,8 @@ This pipeline takes in Visium transcriptomic data as input. Please refer to the 
 - This step uses the *FindMarkers* function in Seurat [[6](#4-references)] to identify DEGs between the two most abundant cell types present
 - From cell deconvolution, each capture spot will have a mix of cell types within it. In this step, capture spots are labeled as being enriched in only one cell type (the most abundant one present in that capture spot). 
 - Across the entire sample, cell types are ranked based on how many capture spots are labelled for a specific cell type enrichment. The two most enriched cell types, and their corresponding capture spots, are used for downstream analysis
-- Between the two groups identified using this approach, statistical significance for differences in counts for each gene present is done with a Negative Binomial test. To account for the multiple testing problem, Bonferroni Correction is used to calculate adjusted P-values. Genes with adjusted P-values lower than the threshould (default 0.05) are flagged as statistically significant, and are passed onto Enrichr in the next step.
-- This step produces a list of DEGs, in CSV format
+- Between the two groups identified using this approach, statistical significance for differences in counts for each gene present is done with a Negative Binomial test. To account for the multiple testing problem, we take the Bonferroni-corrected adjusted P-values and compare it to our P-value threshold (default value in pipeline is 0.05). Genes that pass this check are flagged as statistically significant, and are passed onto Enrichr in the next step.
+- This step produces a volcano plot, along with the statistically significant genes identified from this step of the workflow. 
 
 4. **Pathway Analysis** - Find enriched biological pathways 
 - This step uses the [enrichR](https://github.com/wjawaid/enrichR) package to access the Enrichr database [[9](#4-references)]
@@ -61,7 +61,7 @@ This pipeline takes in Visium transcriptomic data as input. Please refer to the 
 
 A visual of the workflow can be found below:
 
-![alt text](image.png)
+![alt text](DAG.png)
 
 ### 2.1 Software Package Versions
 
@@ -104,7 +104,7 @@ java - v17.0.10
 ```
 </details>
 
-## 3 Installation and Usage
+## 3) Installation and Usage
 
 ### 3.1 Quickstart
 This pipeline requires [git](https://git-scm.com/downloads), [docker](https://docs.docker.com/engine/install/), and [nextflow](https://www.nextflow.io/docs/latest/install.html). Specific versions of these packages used to compile this project can be found in the [package versions](#21-software-package-versions) section.
@@ -246,23 +246,29 @@ The `cell_deconvolution` folder will contain the JPEG file `deconvolution.jpg`, 
     <img src="expected_results/cell_deconvolution/deconvolution.jpg">
 </figure>
 
-The `find_degs` folder will contain a CSV file where each row represents a gene, and has the following column information:
+The `find_degs` folder will contain a volcano plot showing the statistically significant genes identified. The y-axis is the negative log adjusted P-values, and the x-axis is the log2 fold change. Each point is a gene, with genes colored in red being enriched in the most abundant cell type, and genes colored blue being enriched in the second most abundant. An example of this plot from test data is shown below: 
+
+<figure>
+    <img src="expected_results/degs/volcano_plot.jpg"> 
+</figure>
+
+The `find_degs` folder will also contain a CSV file of statistically significant differentially expressed genes between the two cell type groups, where each row represents a gene, and has the following column information:
 - `p_val`: Unadjusted P-value
 - `avg_log2FC`: Log fold-change between the two groups. Positive values indicate higher gene expression in the first group (the group with highest cell abundance).
 - `pct.1`: Percentage of capture spots where the gene is detected in the first group 
 - `pct.2`: Same as `pct.1`, but for the second group. 
 - `p_val_adj`: Adjusted P-value by Bonferroni Correction, based on all genes present. 
 
-The following is the expected CSV output from test data:
+The following is the first five rows of the expected CSV output from test data:
 
-|FIELD1|p_val                |avg_log2FC      |pct.1|pct.2|p_val_adj            |
-|------|---------------------|----------------|-----|-----|---------------------|
-|Gnas  |3.00401197416407e-158|1.85931826348053|1    |1    |9.69845265858871e-154|
-|Olfm1 |6.18010325568972e-146|2.89058134561755|0.997|0.912|1.99524633609943e-141|
-|Basp1 |1.21427149217756e-130|2.37790628689126|0.984|0.901|3.92027551249524e-126|
-|Snap25|6.3468978625425e-125 |2.03939591703795|1    |0.994|2.04909597492184e-120|
-|Tubb2a|2.91254513316691e-123|1.92185990507079|1    |0.956|9.40315196242937e-119|
-|Sncb  |1.09910406839308e-121|2.18865984768322|0.997|0.884|3.54845748480706e-117|
+| Gene   | p_val              | avg_log2FC | pct.1 | pct.2 | p_val_adj          |
+|--------|--------------------|------------|-------|-------|--------------------|
+| Gnas   | 3.00401197416407e-158 | 1.859318  | 1     | 1     | 9.69845265858871e-154 |
+| Olfm1  | 6.18010325568972e-146 | 2.890581  | 0.997 | 0.912 | 1.99524633609943e-141 |
+| Basp1  | 1.21427149217756e-130 | 2.377906  | 0.984 | 0.901 | 3.92027551249524e-126 |
+| Snap25 | 6.3468978625425e-125  | 2.039396  | 1     | 0.994 | 2.04909597492184e-120 |
+| Tubb2a | 2.91254513316691e-123 | 1.921860  | 1     | 0.956 | 9.40315196242937e-119 |
+
 
 The `pathways` folder will contain multiple barplots, each created from a different Enrichr database. The vertical axis are the names of enriched pathways, ordered by P-value (by default). The horizontal axis displays gene counts, and bars are coloured by P-value. The following is one such plot generated from test data, take from the `WikiPathways_2024_Mouse` database. 
 
@@ -271,7 +277,7 @@ The `pathways` folder will contain multiple barplots, each created from a differ
 </figure>
 
 
-### 4 References
+### 4) References
 
 [1] Haque, A., Engel, J., Teichmann, S.A. et al. A practical guide to single-cell RNA-sequencing for biomedical research and clinical applications. Genome Med 9, 75 (2017). https://doi.org/10.1186/s13073-017-0467-4
 

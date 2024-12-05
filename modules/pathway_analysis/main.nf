@@ -5,8 +5,7 @@ process FIND_PATHWAYS {
         mode: "copy"
     )
     tag "Find enriched pathways..."
-    // container "sleung124/spatial-pipeline:latest"
-    debug "true"
+
     input:
         val show_terms 
         val numchar 

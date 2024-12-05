@@ -3,16 +3,13 @@
 # look into using STdeconvolve
 # https://github.com/JEFworks-Lab/STdeconvolve
 
-# need to spend some more time debugging this 
-
 library(STdeconvolve)
 library(Seurat)
 library(tidyverse)
 library(here)
 
 # Parameters from user or config file
-# MAX_LDA_K default is 2
-args = commandArgs(trailingOnly=TRUE)
+args <- commandArgs(trailingOnly=TRUE)
 
 MAX_LDA_K <- as.integer(args[1])
 RADIUS <- as.double(args[2])
