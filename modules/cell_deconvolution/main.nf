@@ -1,3 +1,4 @@
+// process for reference-free cell deconvolution
 process CELL_DECONVOLUTION {
     //steps to find cell types
     publishDir (
@@ -13,8 +14,8 @@ process CELL_DECONVOLUTION {
         path path_to_preprocessed
 
     output:
-        // - intermediate object for find_degs (rds file)
-        // - plot for cell deconvolution
+    // should output intermediate object for DEG step in the form of an RDS file
+    // should output plot for cell deconvolution
         path "*.rds", emit: cell_deconvolved
         path "*.jpg", emit: deconv_plot
 

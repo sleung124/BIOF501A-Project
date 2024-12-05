@@ -1,4 +1,4 @@
-// Define preprocess workflow
+// process for filtering out low-quality capture spots
 process PREPROCESS_DATA {
     /* steps to preprocess visium data 
         - from visium sample, filter out all capture spots with 
@@ -24,7 +24,6 @@ process PREPROCESS_DATA {
         path "*.jpg", emit: mitoplot
 
     script:
-    // Rscript ${path} ${params.preprocess.MITO_THRESHOLD} ${params.preprocess.PATH_TO_SAMPLE}
         """
         echo this is mito threshold: "${mito_threshold}"
         preprocess.r ${mito_threshold} ${filtered_feature_h5} ${path_to_sample}

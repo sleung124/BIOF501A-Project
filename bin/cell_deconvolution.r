@@ -1,7 +1,6 @@
 #!/usr/bin/env Rscript
 
-# look into using STdeconvolve
-# https://github.com/JEFworks-Lab/STdeconvolve
+# Rscript for reference-free cell deconvolution
 
 library(STdeconvolve)
 library(Seurat)
@@ -15,7 +14,8 @@ MAX_LDA_K <- as.integer(args[1])
 RADIUS <- as.double(args[2])
 data <- readRDS(args[3])
 
-# copying the steps from STdeconvolve docs, link above
+# adapting start code from STdeconvolve docs, link below:
+# https://github.com/JEFworks-Lab/STdeconvolve
 cd <- GetAssayData(data, assay="Spatial", layer="counts") 
 pos <- GetTissueCoordinates(data)
 colnames(pos) <- c("y", "x")
@@ -35,7 +35,6 @@ results <- getBetaTheta(optLDA, perc.filt = 0.05, betaScale = 1000)
 deconProp <- results$theta
 deconGexp <- results$beta
 
-# print(deconProp)
 ## visualize deconvolved cell-type proportions
 plt <- vizAllTopics(theta = deconProp,
                     pos = pos,

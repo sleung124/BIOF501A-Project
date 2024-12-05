@@ -1,5 +1,6 @@
 /* 
-    main workflow for all steps 
+    Main workflow for all steps 
+    This should be the file you call when using "nextflow run ..."
 */
 
 // import processes from specific modules

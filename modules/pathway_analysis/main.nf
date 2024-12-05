@@ -1,3 +1,4 @@
+// process for finding enriched pathways with enrichr databases
 process FIND_PATHWAYS {
     // steps to perform cell deconvolution on preprocessed data
     publishDir (
@@ -13,6 +14,7 @@ process FIND_PATHWAYS {
         val species
         path path_to_degs
     output:
+    // should output a bunch of JPEGs
         path "*.jpg"
 
     script:

@@ -20,8 +20,7 @@ seed <- as.integer(args[2])
 PVAL_THRESH <- as.double(args[3])
 deconv_results <- readRDS(args[4])
 seurat_obj <- readRDS(args[5])
-# deconv_results <- readRDS(file.path(here("temp_output", "cell_deconvolution", "deconv_results.rds")))
-# seurat_obj <- readRDS(here("temp_output", "preprocess", "filtered_data.rds"))
+
 if (seed > 0) {
   set.seed(seed)
 }
@@ -46,11 +45,12 @@ cell_type.df <- data.frame(spot = rownames(cell.proportions), cell_type = primar
 to_compare.cell_types <- cell_types_present[order(colSums(table(cell_type.df)), decreasing = TRUE)[1:2]]
 
 #'*step 3: find DEGs*
-#'[IMPORTANT: positive values mean enrichment in GROUP1]
+#'[IMPORTANT: positive values mean enrichment in GROUP1, which is the most abundant cell type group]
 seurat_obj <- NormalizeData(seurat_obj)
 
 #'*subset cells to run faster for testing
-# Extract spatial coordinates
+# samples for barcode names of capture spots
+# ONLY USED TO SPEED UP TEST EXAMPLE, SHOULD NOT USE FOR REAL DATA ANALYSIS
 if (quick_sample > 0) {
   print(paste0("Sampling ", quick_sample, " random capture spots"))
 
@@ -67,7 +67,7 @@ if (quick_sample > 0) {
 # find DEGs
 degs <- FindMarkers(seurat_obj, ident.1 = to_compare.cell_types[1], ident.2 = to_compare.cell_types[2], group.by = "cell_type", test="negbinom") 
 
-# Generate the volcano plot
+# Generate volcano plot
 volcano_data <- degs %>%
   mutate(
     Groups = ifelse(p_val_adj < PVAL_THRESH & avg_log2FC > 0, "Most Abundant Cell Type",
@@ -93,4 +93,3 @@ sig_degs <- degs %>% filter(p_val_adj < PVAL_THRESH & p_val_adj > 0)
 write.csv(degs, "degs.csv")
 ggsave("volcano_plot.jpg", volcano_plot, height = 8, width = 10)
 saveRDS(degs, "degs.rds")
-

@@ -1,5 +1,7 @@
 #!/usr/bin/env Rscript
 
+# Rscript dedicated to finding the enriched pathways present
+# Uses output of find_degs.r
 
 # load libaries and default params
 library(enrichR)
@@ -16,13 +18,10 @@ ORDER_BY <- args[3]
 SPECIES <- paste0(toupper(substr(args[4], 1, 1)), substr(args[4], 2, nchar(args[4])))
 LOADED_DEGS <- readRDS(args[5])
 
-# TODO: print out args to debug; think SPECIES is not parsing properly
-print(paste0("Argument for processed Species: ", SPECIES))
-
-#'*Nextflow Params*
+# List of possible databases 
 listed_dbs <- listEnrichrDbs()
-# user can provide a list of libraries to look through 
-# only works for Mouse and Human samples for now
+
+# Filter for Mouse or Human databases
 if (SPECIES == "Mouse") {
   cond <- grep(SPECIES,unique(listed_dbs$libraryName))
 } else {
@@ -30,11 +29,13 @@ if (SPECIES == "Mouse") {
 }
 DBS <- unique(listed_dbs$libraryName)[cond]
 
+# Grab only gene names
 degs <- LOADED_DEGS  %>%
   rownames_to_column("genes") %>%
   select(genes) %>%
   pull()
 
+# Query enrichr
 enriched <- enrichr(degs, DBS)
 
 #'*Save plots of enriched pathways*

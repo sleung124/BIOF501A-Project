@@ -1,5 +1,5 @@
 process FIND_DEGS{
-    //steps to find enriched pathways from DEGs
+    //steps to find DEGs from cell-abundant regions
     publishDir (
             path: "results/degs",
             mode: "copy",
@@ -14,6 +14,8 @@ process FIND_DEGS{
         path path_to_deconv
         path path_to_preprocessed
     output:
+    // should output intermediate object for pathway analysis in the form of an RDS file
+    // should output volcano plot and CSV of DEGs
         path "*.rds", emit: degs
         path "*.csv"
         path "*.jpg"
