@@ -1,4 +1,4 @@
-# Spatial Transcriptomics Pipeline for Exploratory Data Analysis - BIOF501-A Group project
+# Spatial Transcriptomics Pipeline for Exploratory Data Analysis - BIOF501-A Project
 
 Author: Samuel Leung
 
